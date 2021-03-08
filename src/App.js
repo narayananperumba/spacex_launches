@@ -71,6 +71,10 @@ function App() {
       });
   };
 
+  const handleView = (e, nextView) => {
+    setView(nextView);
+  };
+
   return (
     <div>
       <AppBar position="sticky">
@@ -78,7 +82,7 @@ function App() {
           <Typography className={classes.title} variant="h6" noWrap>
             SpaceX
           </Typography>
-          <ToggleButtonGroup value={view} exclusive style={{ flex: 1 }}>
+          <ToggleButtonGroup value={view} exclusive style={{ flex: 1 }} onChange={handleView}>
             <ToggleButton title="List View" value="list" aria-label="list" >
               <ViewListIcon style={{ color: "white" }} />
             </ToggleButton>
@@ -97,27 +101,31 @@ function App() {
           {
             launches.map((res, _) => (
               <React.Fragment>
-                <List className={classes.root} >
-                  <ListItem alignItems="flex-start" key={res.id} id={res.id}>
-                    <ListItemAvatar>
-                      <Avatar alt={res.name} title={res.name} src={res.links.patch.small} />
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={res.name + res.id}
-                      secondary={
-                        <React.Fragment>
-                          <Typography noWrap variant="body2" component="span" color="textPrimary" display="block">
-                            {res.details}
-                          </Typography>
-                          <Typography variant="body2" component="span" color="textSecondary" display="block">
-                            Launch: {moment(res.date_utc).format("MMMM Do YYYY, h:mm:ss a")} (UTC)
-                          </Typography>
-                        </React.Fragment>
-                      }
-                      />
-                  </ListItem>
-                  <Divider variant="inset" component="li" />
-                </List>
+                { view === 'list' ? (
+                  <List className={classes.root} >
+                    <ListItem alignItems="flex-start" key={res.id} id={res.id}>
+                      <ListItemAvatar>
+                        <Avatar alt={res.name} title={res.name} src={res.links.patch.small} />
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary={res.name + res.id}
+                        secondary={
+                          <React.Fragment>
+                            <Typography noWrap variant="body2" component="span" color="textPrimary" display="block">
+                              {res.details}
+                            </Typography>
+                            <Typography variant="body2" component="span" color="textSecondary" display="block">
+                              Launch: {moment(res.date_utc).format("MMMM Do YYYY, h:mm:ss a")} (UTC)
+                            </Typography>
+                          </React.Fragment>
+                        }
+                        />
+                    </ListItem>
+                    <Divider variant="inset" component="li" />
+                  </List> )
+                  : (
+                    <h1>Card view</h1>
+                  )}
               </React.Fragment>))
             }
             </div>
