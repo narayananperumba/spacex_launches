@@ -20,7 +20,28 @@ function App() {
   const classes = useStyles();
 
   const [view, setView] = React.useState('list');
-  
+
+  useEffect(() => {
+    fetchData()
+  }, []);
+
+  const fetchData = () => {
+    fetch(`https://api.spacexdata.com/v4/launches`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        const launches = data.sort((a, b) => new Date(a.date_utc) < new Date(b.date_utc) ? 1 : -1);
+        console.log(launches);
+      })
+      .catch(error => {
+        console.log('Looks like there was a problem: \n', error);
+      });
+  };
+
   return (
     <div>
       <AppBar position="sticky">
