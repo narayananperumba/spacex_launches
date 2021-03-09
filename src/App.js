@@ -7,27 +7,17 @@ import Typography from '@material-ui/core/Typography';
 import Toolbar from '@material-ui/core/Toolbar';
 import ViewListIcon from '@material-ui/icons/ViewList';
 import ViewModuleIcon from '@material-ui/icons/ViewModule';
-import ToggleButton from '@material-ui/lab/ToggleButton';
-import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+import { ToggleButton, ToggleButtonGroup, Pagination } from '@material-ui/lab';
 import Button from '@material-ui/core/Button';
 import LinearProgress from '@material-ui/core/LinearProgress';
-
 import Avatar from '@material-ui/core/Avatar';
 import Grid from '@material-ui/core/Grid';
 
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
+import { List, ListItem, ListItemText, ListItemAvatar } from '@material-ui/core';
+import { Card, CardContent, CardMedia } from '@material-ui/core';
+
 import Divider from '@material-ui/core/Divider';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-
 import moment from 'moment';
-
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-
-import Pagination from '@material-ui/lab/Pagination';
 
 import Carousel from 'react-material-ui-carousel';
 import Paper from '@material-ui/core/Paper';
@@ -273,7 +263,7 @@ function App() {
                           <Grid item>
                             {res.links.flickr.original.length > 0 && <Carousel>
                               {
-                                res.links.flickr.original.map((sliderImage, i) => (sliderImage !== "" && <Paper><img className={classes.carousel} key={i} src={sliderImage} /></Paper>))
+                                res.links.flickr.original.map((sliderImage, i) => (sliderImage !== "" && <Paper><img alt="SpaceX Launches" className={classes.carousel} key={i} src={sliderImage} /></Paper>))
                               }
                             </Carousel>}
                           </Grid>
