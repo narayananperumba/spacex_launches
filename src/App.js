@@ -23,6 +23,10 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 
 import moment from 'moment';
 
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,6 +41,25 @@ const useStyles = makeStyles((theme) => ({
   page: {
     display: 'flex',
     flexFlow: 'wrap',
+  },
+  card: {
+    display: 'flex',
+    flex: '1 0 auto',
+    minWidth: '30%',
+    margin: 4,
+    [theme.breakpoints.down('md')]: {
+      flex: '1 1 auto',
+    },
+  },
+  details: {
+    display: 'flex',
+    flexDirection: 'column',
+    maxWidth: 475,
+  },
+  avatar: {
+    width: theme.spacing(12),
+    height: theme.spacing(12),
+    margin: '4px auto',
   },
 }));
 function App() {
@@ -124,7 +147,22 @@ function App() {
                     <Divider variant="inset" component="li" />
                   </List> )
                   : (
-                    <h1>Card view</h1>
+                    <Card className={classes.card}>
+                      <div className={classes.details}>
+                        <CardContent>
+                          <Typography variant="h5" component="h2">
+                            {res.name}
+                          </Typography>
+                          <Typography variant="body2" component="p" color="textPrimary">
+                            {(res.details && (res.details).length > 200) ? (res.details).substring(0, 200) + "..." : (res.details)}
+                          </Typography>
+                          <Typography variant="body2" component="p" color="textSecondary">
+                            Launch: {moment(res.date_utc).format("MMMM Do YYYY, h:mm:ss a")} (UTC)
+                          </Typography>
+                        </CardContent>
+                      </div>
+                      <Avatar className={classes.avatar} alt={res.name} title={res.name} src={res.links.patch.small} />
+                    </Card>
                   )}
               </React.Fragment>))
             }
