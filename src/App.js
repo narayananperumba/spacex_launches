@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -25,6 +25,12 @@ import moment from 'moment';
 
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+
+import Pagination from '@material-ui/lab/Pagination';
+
+import Carousel from 'react-material-ui-carousel';
+import Paper from '@material-ui/core/Paper';
 
 
 
@@ -61,6 +67,44 @@ const useStyles = makeStyles((theme) => ({
     height: theme.spacing(12),
     margin: '4px auto',
   },
+  paper: {
+    position: "absolute",
+    width: '30%',
+    height: '30%',
+    backgroundColor: theme.palette.background.paper,
+    border: "2px solid #000",
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3)
+  },
+  carousel: {
+    maxWidth: "100%",
+    maxHeight: "50%",
+    margin: 'auto',
+    display: 'block',
+  },
+  showLess: {
+    border: "1px solid #ccc",
+    float: "right",
+    background: "white",
+    borderRadius: 3,
+    cursor: "pointer"
+  },
+  viewmore: {
+    width: "100%",
+  },
+  cover: {
+    width: "50%",
+    height: "300px",
+    [theme.breakpoints.down('sm')]: {
+      width: "auto",
+      height: "auto",
+    },
+    margin: "auto",
+    display: "block"
+  },
+  cardDetailed: {
+    width: "100%"
+  },
 }));
 function App() {
   const classes = useStyles();
@@ -68,6 +112,14 @@ function App() {
   const [view, setView] = React.useState('list');
   const [launches, setLaunches] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
+
+  const [noOfPages, setNoOfPages] = React.useState();
+  const [offset, setOffset] = React.useState(0);
+  const [countPerPage, setCountPerPage] = React.useState(50);
+  const [slice, setSlice] = React.useState([]);
+  const [page, setPage] = React.useState(1);
+
+  const [showDetails, setShowDetails] = React.useState({});
 
   useEffect(() => {
     fetchData()
@@ -84,9 +136,8 @@ function App() {
       .then(response => response.json())
       .then(data => {
         const launches = data.sort((a, b) => new Date(a.date_utc) < new Date(b.date_utc) ? 1 : -1);
-        console.log(launches);
         setLaunches(launches)
-        // handleData(launches)
+        handleData(launches)
         setLoading(false);
       })
       .catch(error => {
@@ -96,6 +147,31 @@ function App() {
 
   const handleView = (e, nextView) => {
     setView(nextView);
+  };
+
+  const handleData = (launches) => {
+    const slice = launches.slice(offset, offset + countPerPage)
+    setNoOfPages(Math.ceil(launches.length / countPerPage));
+    setSlice(slice)
+  };
+
+  const handlePagination = (event, value) => {
+    setPage(value);
+    const newOffset = (value - 1) * countPerPage;
+    setOffset(newOffset);
+    const slice = launches.slice(newOffset, newOffset + countPerPage)
+    setSlice(slice)
+  };
+
+  const viewDeatils = (e) => {
+    const id = e.currentTarget.id;
+    const details = {}
+    details[id] = true;
+    setShowDetails(details);
+  };
+
+  const handleClose = () => {
+    setShowDetails({});
   };
 
   return (
@@ -122,11 +198,11 @@ function App() {
 
         <div className={classes.page}>
           {
-            launches.map((res, _) => (
-              <React.Fragment>
+            slice.map((res, _) => (
+              <React.Fragment key={res.id}>
                 { view === 'list' ? (
-                  <List className={classes.root} >
-                    <ListItem alignItems="flex-start" key={res.id} id={res.id}>
+                  !showDetails[res.id] && <List className={classes.root} >
+                    <ListItem alignItems="flex-start" id={res.id} onClick={viewDeatils}>
                       <ListItemAvatar>
                         <Avatar alt={res.name} title={res.name} src={res.links.patch.small} />
                       </ListItemAvatar>
@@ -142,12 +218,12 @@ function App() {
                             </Typography>
                           </React.Fragment>
                         }
-                        />
+                      />
                     </ListItem>
                     <Divider variant="inset" component="li" />
-                  </List> )
+                  </List>)
                   : (
-                    <Card className={classes.card}>
+                    !showDetails[res.id] && <Card className={classes.card} id={res.id} onClick={viewDeatils}>
                       <div className={classes.details}>
                         <CardContent>
                           <Typography variant="h5" component="h2">
@@ -164,11 +240,61 @@ function App() {
                       <Avatar className={classes.avatar} alt={res.name} title={res.name} src={res.links.patch.small} />
                     </Card>
                   )}
-              </React.Fragment>))
-            }
-            </div>
 
+                {showDetails[res.id] && <Paper className={classes.cardDetailed} id={res.id}>
+                  <div className={classes.viewmore}>
+                    <Grid container spacing={2}>
+                      <Grid item>
+                        <Avatar className={classes.avatar} alt={res.name} title={res.name} src={res.links.patch.small} />
+                      </Grid>
+                      <Grid item xs={12} sm container>
+                        <Grid item xs container direction="column" spacing={2}>
+                          <Grid item xs>
+                            <Typography variant="button" component="button" className={classes.showLess} onClick={handleClose}>Show Less
+                            </Typography>
+                            <Typography gutterBottom variant="subtitle1">
+                              {res.name}
+                            </Typography>
+                            <Typography variant="body2" gutterBottom>
+                              {res.details}
+                            </Typography>
+                            {res.rocket && <Typography variant="body2" component="p" color="textPrimary" gutterBottom>
+                              Rocket: {res.rocket}
+                            </Typography>}
+                            {res.payloads.length > 0 && <Typography variant="body2" component="p" color="textPrimary" gutterBottom>
+                              Payloads: {res.payloads.map((payload, _) => (
+                              payload + ','
+                            ))}
+                            </Typography>}
+                            <Typography variant="body2" component="p" color="textSecondary">
+                              Launch: {moment(res.date_utc).format("MMMM Do YYYY, h:mm:ss a")} (UTC)
+                            </Typography>
+                          </Grid>
+                          <Grid item>
+                            {res.links.flickr.original.length > 0 && <Carousel>
+                              {
+                                res.links.flickr.original.map((sliderImage, i) => (sliderImage !== "" && <Paper><img className={classes.carousel} key={i} src={sliderImage} /></Paper>))
+                              }
+                            </Carousel>}
+                          </Grid>
+                          <Grid item>
+                            {res.links.youtube_id && <CardMedia
+                              className={classes.cover}
+                              component="iframe"
+                              src={`https://www.youtube.com/embed/${res.links.youtube_id}`}
+                              title={res.name}
+                            />}
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </div>
+                </Paper>}
+              </React.Fragment>))
+          }
+        </div>
       </Grid>
+      <Pagination count={noOfPages} color="primary" page={page} onChange={handlePagination} position="sticky" />
     </div>
   );
 }
