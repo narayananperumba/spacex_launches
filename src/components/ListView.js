@@ -13,7 +13,7 @@ export default function ListView({ handleClose, launches, showDetails, view, vie
       {launches.map((launch, _) => (
         (view === 'list') && <>
         {!showDetails[launch.id] && 
-        <ListItem alignItems="flex-start" onClick={() => viewDetails(launch.id)}>
+        <ListItem alignItems="flex-start" key={launch.id} onClick={() => viewDetails(launch.id)}>
         <ListItemAvatar>
           <Avatar alt={launch.name} title={launch.name} src={launch.links.patch.small} />
         </ListItemAvatar>
@@ -31,12 +31,12 @@ export default function ListView({ handleClose, launches, showDetails, view, vie
           }
         />
       </ListItem>}
+      <Divider variant="inset" component="li"/>
       
       {showDetails[launch.id] && 
       <ViewMore showDetails={showDetails} launch={launch} handleClose={handleClose}/>}
       </>
       ))}
-      <Divider variant="inset" component="li" />
     </List>
   );
 }

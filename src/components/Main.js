@@ -3,35 +3,25 @@ import React, { useEffect, useState } from 'react';
 import styles from '../styles/Style'
 import ListView from './ListView'
 import GridView from '../components/GridView'
-// import ViewMore from '../components/ViewMore'
 
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { Pagination } from '@material-ui/lab';
-// import Grid from '@material-ui/core/Grid';
-
-
-
 
 export default function Main({ view }){
     const classes = styles();
 
     const [launches, setLaunches] = useState([]);
     const [loading, setLoading] = useState(false);
-
     const [noOfPages, setNoOfPages] = useState(1);
     const [offset, setOffset] = useState(0);
     const [slice, setSlice] = useState([]);
     const [page, setPage] = useState(1);
-
     const [showDetails, setShowDetails] = useState({});
     const countPerPage = 50;
-
+    
     useEffect(() => {
-        fetchData()
+        fetchData();
     }, []);
-
-  // fetch data as custom hook
-  // alternate axios
 
   const fetchData = () => {
     setLoading(true);
