@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styles from '../styles/Style'
-import {AppBar, Button, Toolbar, Typography } from '@material-ui/core';
+import {AppBar, Button, IconButton, Toolbar, Typography } from '@material-ui/core';
 import {ViewList as ViewListIcon, ViewModule as ViewModuleIcon} from '@material-ui/icons';
+// import ListIcon from '@material-ui/icons/List';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 
 
@@ -19,7 +20,7 @@ return (
             <ToggleButton title="List View" value="list" aria-label="list" >
                 <ViewListIcon style={{ color: "white" }} />
             </ToggleButton>
-            <ToggleButton title="Grid View" value="module" aria-label="module">
+            <ToggleButton title="Grid View" value="grid" aria-label="module">
                 <ViewModuleIcon style={{ color: "white" }} />
             </ToggleButton>
             </ToggleButtonGroup>
