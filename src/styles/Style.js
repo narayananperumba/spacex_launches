@@ -11,6 +11,7 @@ export default function Classes(){
         },
         title: {
           marginRight: theme.spacing(2),
+          flexGrow: 1
         },
         page: {
           display: 'flex',
@@ -45,8 +46,9 @@ export default function Classes(){
           padding: theme.spacing(2, 4, 3)
         },
         carousel: {
-          maxWidth: "100%",
-          maxHeight: "50%",
+          // maxWidth: "20%",
+          // maxHeight: "200px",
+          height: "250px",
           margin: 'auto',
           display: 'block',
         },
@@ -57,12 +59,12 @@ export default function Classes(){
           borderRadius: 3,
           cursor: "pointer"
         },
-        viewmore: {
-          width: "100%",
-        },
+        // viewmore: {
+        //   width: "100%",
+        // },
         cover: {
-          width: "50%",
-          height: "300px",
+          // width: "50%",
+          height: "250px",
           [theme.breakpoints.down('sm')]: {
             width: "auto",
             height: "auto",
@@ -71,16 +73,12 @@ export default function Classes(){
           display: "block"
         },
         cardDetailed: {
-          width: "100%"
+          width: "90%"
         },
-        flexClass: {
-          flex: 1
+        backdrop: {
+          zIndex: theme.zIndex.drawer + 1,
+          color: '#fff',
         },
-        girdClass:{
-          "&MuiSelected" : {
-      
-          }
-        }
           
       }));
 

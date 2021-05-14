@@ -12,8 +12,7 @@ export default function ListView({ handleClose, launches, showDetails, view, vie
     <List className={classes.root}>
       {launches.map((launch, _) => (
         (view === 'list') && <>
-        {!showDetails[launch.id] && 
-        <ListItem alignItems="flex-start" key={launch.id} onClick={() => viewDetails(launch.id)}>
+        {<ListItem alignItems="flex-start" key={launch.id} onClick={() => viewDetails(launch.id)}>
         <ListItemAvatar>
           <Avatar alt={launch.name} title={launch.name} src={launch.links.patch.small} />
         </ListItemAvatar>

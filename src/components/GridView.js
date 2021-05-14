@@ -14,7 +14,7 @@ export default function GridView({ handleClose, launches, showDetails, view, vie
       <>
       {launches.map((launch, _) => (
             (view === 'grid') && <>
-            {!showDetails[launch.id] && 
+            { 
             <Card className={classes.card} onClick={() => viewDetails(launch.id)}>
                 <div className={classes.details}>
                     <CardContent>

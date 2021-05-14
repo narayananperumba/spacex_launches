@@ -7,12 +7,19 @@ export default function App() {
   const [view, setView] = useState('list');
 
   const handleView = (e, nextView) => {
+    console.log("nextView", nextView);
+    setView(nextView);
+  };
+  
+  const toggleView = (currView) => {
+    console.log("currView", currView);
+    const nextView = currView === 'list' ? 'grid' : 'list';
     setView(nextView);
   };
 
   return (
     <>  
-      <Header view={view} handleView={handleView}/>
+      <Header view={view} handleView={handleView} toggleView={toggleView}/>
       <Main view={view}/>
     </>
   );
